@@ -2,12 +2,16 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>chatterbox</title>
     <link rel="stylesheet" href="styles/styles.css">
 
     <!-- dependencies -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
     <script src="bower_components/jquery/dist/jquery.js"></script>
-    <script src="bower_components/underscore/underscore-min.js"></script>
+    <script src="./bower_components/xss/dist/xss.min.js"></script>
+    <script src="./bower_components/underscore/underscore.js"></script>
     <script>
       // YOU DO NOT NEED TO EDIT THIS CODE
       if (!/(&|\?)username=/.test(window.location.search)) {
@@ -26,6 +30,13 @@
   <body>
     <div id="main">
       <h1>chatterbox</h1>
+      <label for="roomSelect">Select Room: </label>
+      <select name="roomSelect" id="roomSelect">
+      </select>
+      <form action="#" id="send" method="post">
+        <input type="text" name="message" id="message">
+        <button type="submit" name="submit" class="submit">SEND</button>
+      </form>
       <!-- Your HTML goes here! -->
     </div>
     <div id="chats"></div>
