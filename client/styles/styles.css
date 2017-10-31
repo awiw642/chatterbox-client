@@ -1,11 +1,14 @@
-html { -webkit-font-smoothing: antialiased; }
+html { -webkit-font-smoothing: antialiased;
+}
 
 body {
     background: #E6ECF0;
+    background-image: url('../images/wild_flowers.png');
     text-align: center;
     padding: 0 25px;
     font-family: "Helvetica Neue", sans-serif;
     font-weight: 300;
+
 }
 
 
@@ -99,5 +102,6 @@ form input[type=text] {
 
 .friend {
     color: #fff;
-    background-color: #0090da;
+    background-color: #4B367C;
+    font-weight: bold;
 }

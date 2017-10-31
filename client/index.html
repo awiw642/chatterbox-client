@@ -28,17 +28,19 @@
     <script src="scripts/app.js"></script>
   </head>
   <body>
-    <div id="main">
-      <h1>chatterbox</h1>
-      <label for="roomSelect">Select Room: </label>
-      <select name="roomSelect" id="roomSelect">
-      </select>
-      <form action="#" id="send" method="post">
-        <input type="text" name="message" id="message">
-        <button type="submit" name="submit" class="submit">SEND</button>
-      </form>
-      <!-- Your HTML goes here! -->
+    <div class="container">
+      <div id="main">
+        <h1>chatterbox</h1>
+        <label for="roomSelect">Select Room: </label>
+        <select name="roomSelect" id="roomSelect">
+        </select>
+        <form action="#" id="send" method="post">
+          <input type="text" name="message" id="message">
+          <button type="submit" name="submit" class="submit">SEND</button>
+        </form>
+        <!-- Your HTML goes here! -->
+      </div>
+      <div id="chats"></div>
     </div>
-    <div id="chats"></div>
   </body>
 </html>

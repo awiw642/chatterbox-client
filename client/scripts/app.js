@@ -1,4 +1,4 @@
-/*jshint esversion: 6 */
+// YOUR CODE HERE:
 
 $(document).ready(() => {
   app.init();
@@ -7,7 +7,7 @@ $(document).ready(() => {
 const app = {
   server: 'http://parse.hrr.hackreactor.com/chatterbox/classes/messages',
   username: window.location.search.substr(10) || 'anonymous',
-  roomname: 'The Death Star',
+  roomname: 'lobby',
   messages: [],
   friends: {},
   lastMessageId: 0
@@ -22,6 +22,7 @@ app.init = () => {
   // Listeners
   app.$chats.on('click', '.username', app.handleUsernameClick);
   app.$send.on('submit', app.handleSubmit);
+  app.$roomSelect.on('change', app.handleRoomChange);
 
   app.fetch(false);
 
@@ -52,13 +53,16 @@ app.fetch = () => {
     contentType: 'application/json',
     data: {order: '-createdAt'},
     success: (data) => {
+      if (!data.results || !data.results.length) {
+        return;
+      }
       // console.log('inside GET ---->', data);
       app.messages = data.results;
       let recentMessage = app.messages[0];
       // console.log('RECENT MESSAGE ---->', recentMessage);
       if (recentMessage !== app.lastMessageId) {
-        app.renderMessages(data.results);
         app.renderRoomList(data.results);
+        app.renderMessages(data.results);
         app.lastMessageId = recentMessage.objectId;
       }
     },
@@ -75,7 +79,7 @@ app.clearMessages = () => {
 app.renderMessage = (message) => {
   let $newChat = $('<div class="chat"></div>');
   let msg = filterXSS(message.text);
-  let username = filterXSS(message.username);
+  let username = filterXSS(decodeURI(message.username));
   let roomname = filterXSS(message.roomname);
 
   $newChat.html(`<span href=# class="username" data-username="${username}" data-roomname="${roomname}">` + username + '<br />' + msg + '</span>');
@@ -83,7 +87,7 @@ app.renderMessage = (message) => {
   // if app.friends[msg.username] === true
   if (app.friends[username] === true) {
     $(`[data-username="${username}"]`).addClass('friend');
-    // then we add a class of friend
+   // then we add a class of friend
   }
 
   app.$chats.append($newChat);
@@ -94,19 +98,22 @@ app.renderMessages = (messages) => {
   // clear all messages;
   app.clearMessages();
   // for each message in the array
-  app.messages.forEach((message) => {
-    app.renderMessage(message);
-  });
-  // call render message
+  if (Array.isArray(messages)) {
+    app.messages.filter((message) => {
+        return message.roomname === app.roomname || app.roomname === 'lobby' && !message.roomname;
+      }).forEach(app.renderMessage);
+  }
+    // call render message
 };
 
 app.renderRoomList = (messages) => {
+  app.$roomSelect.html('<option value="__newRoom">New Room</option>');
   if (messages) {
     const rooms = {};
-    messages.forEach((message, index) => {
+    messages.forEach((message, i) => {
       let roomname = message.roomname;
-      console.log(roomname);
-      if (rooms[roomname]) { //!(roomname in rooms)
+    //console.log(roomname);
+      if (roomname && !rooms[roomname]) {
         app.renderRoom(roomname);
         rooms[roomname] = true;
       }
@@ -141,8 +148,23 @@ app.handleSubmit = (event) => {
   const message = {
     username: app.username,
     text: $('#message').val(),
-    roomname: app.roomname || 'The Death Star'
+    roomname: app.roomname || 'lobby'
   };
   app.send(message);
   event.preventDefault();
+};
+
+app.handleRoomChange = (event) => {
+  let selectIndex = app.$roomSelect.prop('selectedIndex');
+  if(selectIndex === 0) {
+    let roomname = prompt('Enter room name...');
+    if (roomname) {
+      app.roomname = roomname;
+      app.renderRoom(roomname);
+      app.$roomSelect.val(roomname);
+    }
+  } else {
+    app.roomname = app.$roomSelect.val();
+  }
+  app.renderMessages(app.messages);
 };

@@ -1,0 +1,18 @@
+Anto ---> sends me a message
+  Message needs to Render
+    Render attaches message to the dom
+      if (message was sent by a friend)
+        It should look different
+
+
+Luke ---> waits for the message
+  since message has the .friend class
+    message appears with .friend styling
+
+
+---- To differentiate friend or foe?
+
+  assuming friends list is an obj
+    if (app.friends[msg.username])
+      then they are a friend
+        append .friend to message?
